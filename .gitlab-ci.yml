@@ -43,9 +43,9 @@ test_build:
   services:
     - docker:dind
   script:
-    - docker build -t test-build .
+    - docker build -t test-build-oraclelinux8 .
     - docker stop test-oraclelinux8 && docker rm test-oraclelinux8
-    - docker run -d --name=test-oraclelinux8 --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro test-build
+    - docker run -d --name=test-oraclelinux8 --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro test-build-oraclelinux8
     - docker exec test-oraclelinux8 systemctl --version
     - docker stop test-oraclelinux8 && docker rm test-oraclelinux8
 
