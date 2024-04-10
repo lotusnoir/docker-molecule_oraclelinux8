@@ -1,10 +1,9 @@
-FROM oraclelinux:8
+FROM registry.access.redhat.com/ubi8/ubi
 LABEL maintainer="lotusnoir"
 
 ENV container docker
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
-ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /lib/systemd/system/sysinit.target.wants/
 RUN (for i in *; do [ "${i}" = "systemd-tmpfiles-setup.service" ] || rm -f "${i}"; done); \
@@ -16,8 +15,13 @@ RUN (for i in *; do [ "${i}" = "systemd-tmpfiles-setup.service" ] || rm -f "${i}
     rm -f /lib/systemd/system/basic.target.wants/*;\
     rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-RUN yum -y install rpm dnf-plugins-core && yum -y update \
-    && yum -y install epel-release initscripts sudo which python3-pip wget \
+RUN yum -y install \
+        which \
+        wget \
+        less \
+        python3-pip \
+        sudo \
+        vim \
     && yum clean all && rm -rf /tmp/* /var/tmp/* /usr/share/doc /usr/share/man
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip \
@@ -25,5 +29,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip \
 
 RUN wget -q -O /usr/local/bin/goss https://github.com/aelsabbahy/goss/releases/download/v0.4.2/goss-linux-amd64 && chmod +x /usr/local/bin/goss
 
-VOLUME [ "/sys/fs/cgroup" ]
+RUN echo '# BLANK FSTAB' > /etc/fstab
+
+VOLUME ["/sys/fs/cgroup"]
 ENTRYPOINT ["/lib/systemd/systemd"]
