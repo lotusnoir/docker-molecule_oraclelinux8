@@ -16,7 +16,7 @@ RUN (for i in *; do [ "${i}" = "systemd-tmpfiles-setup.service" ] || rm -f "${i}
     rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN yum -y install rpm dnf-plugins-core && yum -y update \
-    && yum -y install epel-release initscripts sudo which python3-pip wget vim curl \
+    && yum -y install epel-release initscripts sudo which python39-pip wget vim curl \
     && yum clean all && rm -rf /tmp/* /var/tmp/* /usr/share/doc /usr/share/man
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip \
